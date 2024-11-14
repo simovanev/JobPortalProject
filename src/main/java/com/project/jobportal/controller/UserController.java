@@ -30,7 +30,14 @@ public class UserController {
         return "register";
     }
     @PostMapping("/register/new")
-    public String userRegister(@Valid Users user){
+    public String userRegister(@Valid Users user, Model model){
+        if (usersService.ifEmailExist(user.getEmail()).isPresent()){
+            model.addAttribute("error", "This email already exists");
+            List<UsersType> allTypes=usersTypeService.getAll();
+            model.addAttribute("getAllTypes",allTypes);
+            model.addAttribute("user", new Users());
+            return "register";
+        }
         usersService.addNewUser(user);
         return "dashboard";
     }

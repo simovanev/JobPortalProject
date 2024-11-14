@@ -2,10 +2,11 @@ package com.project.jobportal.services;
 
 import com.project.jobportal.entity.Users;
 import com.project.jobportal.repository.UsersRepository;
-import org.apache.catalina.User;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -19,5 +20,8 @@ public class UsersService {
         user.setActive(true);
         user.setRegistrationDate(new Date(System.currentTimeMillis()));
         return usersRepository.save(user);
+    }
+    public Optional<Users> ifEmailExist(String email) {
+      return   usersRepository.findByEmail(email);
     }
 }
