@@ -14,8 +14,8 @@ import java.util.List;
 
 @Controller
 public class UserController {
-    private UsersTypeService usersTypeService;
-    private UsersService usersService;
+    private final UsersTypeService usersTypeService;
+    private final UsersService usersService;
 
     public UserController(UsersTypeService usersTypeService, UsersService usersService) {
         this.usersTypeService = usersTypeService;
