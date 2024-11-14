@@ -2,6 +2,7 @@ package com.project.jobportal.controller;
 
 import com.project.jobportal.entity.Users;
 import com.project.jobportal.entity.UsersType;
+import com.project.jobportal.services.UsersService;
 import com.project.jobportal.services.UsersTypeService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,11 @@ import java.util.List;
 @Controller
 public class UserController {
     private UsersTypeService usersTypeService;
+    private UsersService usersService;
 
-    public UserController(UsersTypeService usersTypeService) {
+    public UserController(UsersTypeService usersTypeService, UsersService usersService) {
         this.usersTypeService = usersTypeService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/register")
@@ -28,7 +31,7 @@ public class UserController {
     }
     @PostMapping("/register/new")
     public String userRegister(@Valid Users user){
-        System.out.println(user);
+        usersService.addNewUser(user);
         return "dashboard";
     }
 }

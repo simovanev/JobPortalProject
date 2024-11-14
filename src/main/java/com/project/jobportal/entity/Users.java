@@ -10,7 +10,7 @@ import java.util.Date;
 @Table
 public class Users {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
     @Column(unique = true)
@@ -22,7 +22,7 @@ public class Users {
     private boolean isActive;
 
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date registrationdate;
+    private Date registrationDate;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userTypeId", referencedColumnName = "userTypeId")
@@ -64,11 +64,11 @@ public class Users {
     }
 
     public Date getRegistrationdate() {
-        return registrationdate;
+        return registrationDate;
     }
 
-    public void setRegistrationdate(Date registrationdate) {
-        this.registrationdate = registrationdate;
+    public void setRegistrationDate(Date registrationdate) {
+        this.registrationDate = registrationdate;
     }
 
     public UsersType getUserTypeId() {
@@ -80,13 +80,13 @@ public class Users {
     }
 
     @Override
-    public String toString() {
+    public String  toString() {
         return "Users{" +
                 "userId=" + userId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", isActive=" + isActive +
-                ", registrationdate=" + registrationdate +
+                ", registrationdate=" + registrationDate +
                 ", userTypeId=" + userTypeId +
                 '}';
     }
