@@ -35,6 +35,10 @@ public class RecruiterProfile {
         this.profilePhoto = profilePhoto;
     }
 
+    public RecruiterProfile(Users savedUser) {
+        this.userId=savedUser;
+    }
+
     public int getUserAccountId() {
         return userAccountId;
     }
