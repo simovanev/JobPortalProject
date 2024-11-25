@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class JobPostActivityController {
-    private UsersService usersService;
+    private final UsersService usersService;
 
     public JobPostActivityController(UsersService usersService) {
         this.usersService = usersService;
@@ -25,7 +25,7 @@ public class JobPostActivityController {
             String currentUserName = authentication.getName();
             model.addAttribute("username", currentUserName);
         }
-        model.addAttribute("userProfile", currentUserProfile);
+        model.addAttribute("user", currentUserProfile);
 
         return "dashboard";
     }

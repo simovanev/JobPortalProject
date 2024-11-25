@@ -29,34 +29,37 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register(Model model){
-        List<UsersType> allTypes=usersTypeService.getAll();
-        model.addAttribute("getAllTypes",allTypes);
+    public String register(Model model) {
+        List<UsersType> allTypes = usersTypeService.getAll();
+        model.addAttribute("getAllTypes", allTypes);
         model.addAttribute("user", new Users());
         return "register";
     }
+
     @PostMapping("/register/new")
-    public String userRegister(@Valid Users user, Model model){
-        if (usersService.ifEmailExist(user.getEmail()).isPresent()){
+    public String userRegister(@Valid Users user, Model model) {
+        if (usersService.ifEmailExist(user.getEmail()).isPresent()) {
             model.addAttribute("error", "This email already exists");
-            List<UsersType> allTypes=usersTypeService.getAll();
-            model.addAttribute("getAllTypes",allTypes);
+            List<UsersType> allTypes = usersTypeService.getAll();
+            model.addAttribute("getAllTypes", allTypes);
             model.addAttribute("user", new Users());
             return "register";
         }
         usersService.addNewUser(user);
-        return "dashboard";
+        return "redirect:/dashboard/";
     }
+
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
-@GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response){
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication!=null){
-        new SecurityContextLogoutHandler().logout(request,response,authentication);
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/";
     }
-    return "redirect:/";
-}
 }
