@@ -6,6 +6,7 @@ import com.project.jobportal.entity.Users;
 import com.project.jobportal.repository.RecruiterProfileRepository;
 import com.project.jobportal.repository.UsersRepository;
 import com.project.jobportal.services.RecruiterProfileService;
+import com.project.jobportal.util.FileUploadUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,10 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,7 +49,7 @@ public class RecruiterProfileController {
         }
         return "recruiter_profile";
     }
-    @GetMapping("/recruiter-profile/addNew")
+    @PostMapping("/addNew")
     public String addNew(RecruiterProfile recruiterProfile, @RequestParam("image")MultipartFile multipartFile, Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
@@ -64,7 +67,12 @@ public class RecruiterProfileController {
         RecruiterProfile saveUser=recruiterProfileService.addNew(recruiterProfile);
 
         String uploadDir="photos/recruiter/"+saveUser.getUserAccountId();
+        try {
+            FileUploadUtil.saveFile(uploadDir,fileName,multipartFile);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
-        return "dashboard";
+        return "redirect:/dashboard";
     }
 }
