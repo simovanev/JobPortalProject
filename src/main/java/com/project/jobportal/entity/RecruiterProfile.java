@@ -36,7 +36,7 @@ public class RecruiterProfile {
     }
 
     public RecruiterProfile(Users savedUser) {
-        this.userId=savedUser;
+        this.userId = savedUser;
     }
 
     public int getUserAccountId() {
@@ -109,6 +109,14 @@ public class RecruiterProfile {
 
     public void setProfilePhoto(String profilePhoto) {
         this.profilePhoto = profilePhoto;
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (profilePhoto == null) {
+            return null;
+        }
+        return "/photos/recruiter/" + userAccountId + "/" + profilePhoto;
     }
 
     @Override
