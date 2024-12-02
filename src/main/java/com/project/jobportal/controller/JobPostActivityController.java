@@ -3,6 +3,7 @@ package com.project.jobportal.controller;
 import com.project.jobportal.services.UsersService;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,10 @@ public class JobPostActivityController {
             String currentUserName = authentication.getName();
             model.addAttribute("username", currentUserName);
         }
+       if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Recruiter"))){
+
+       }
+
         model.addAttribute("user", currentUserProfile);
 
         return "dashboard";
