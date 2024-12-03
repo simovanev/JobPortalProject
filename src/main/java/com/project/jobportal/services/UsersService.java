@@ -59,17 +59,28 @@ public class UsersService {
             Users users = usersRepository.findByEmail(userName)
                     .orElseThrow(() -> new UsernameNotFoundException("No such user"));
             int userId = users.getUserId();
-            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Recruiter"))){
+            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("Recruiter"))) {
                 RecruiterProfile recruiterProfile = recruiterProfileRepository.findById(userId)
                         .orElse(new RecruiterProfile());
                 return recruiterProfile;
-            }else {
+            } else {
                 JobSeekerProfile jobSeekerProfile = jobSeekerProfileRepository.findById(userId)
                         .orElse(new JobSeekerProfile());
                 return jobSeekerProfile;
             }
 
 
+        }
+        return null;
+    }
+
+    public Users getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String userName = authentication.getName();
+            Users user = usersRepository.findByEmail(userName)
+                    .orElseThrow(() -> new UsernameNotFoundException("No such user"));
+            return user;
         }
         return null;
     }
