@@ -14,7 +14,7 @@ public class JobSeekerProfile {
     @MapsId
     private Users userId;
     private String firstName;
-    private String lastNAme;
+    private String lastName;
     private String city;
     private String state;
     private String country;
@@ -33,11 +33,11 @@ public class JobSeekerProfile {
         this.userId = userId;
     }
 
-    public JobSeekerProfile(Integer userAccountId, Users userId, String firstName, String lastNAme, String city, String state, String country, String workAuthorization, String employmentType, String resume, String profilePhoto, List<Skills> skills) {
+    public JobSeekerProfile(Integer userAccountId, Users userId, String firstName, String lastName, String city, String state, String country, String workAuthorization, String employmentType, String resume, String profilePhoto, List<Skills> skills) {
         this.userAccountId = userAccountId;
         this.userId = userId;
         this.firstName = firstName;
-        this.lastNAme = lastNAme;
+        this.lastName = lastName;
         this.city = city;
         this.state = state;
         this.country = country;
@@ -72,12 +72,12 @@ public class JobSeekerProfile {
         this.firstName = firstName;
     }
 
-    public String getLastNAme() {
-        return lastNAme;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastNAme(String lastNAme) {
-        this.lastNAme = lastNAme;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getCity() {
@@ -145,7 +145,7 @@ public class JobSeekerProfile {
     }
 
     @Transient
-    public String getPhotoImagePath() {
+    public String getPhotosImagePath() {
         if (userAccountId == null || profilePhoto == null) {
             return null;
         }
@@ -158,7 +158,7 @@ public class JobSeekerProfile {
                 "userAccountId=" + userAccountId +
                 ", userId=" + userId +
                 ", firstName='" + firstName + '\'' +
-                ", lastNAme='" + lastNAme + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", country='" + country + '\'' +

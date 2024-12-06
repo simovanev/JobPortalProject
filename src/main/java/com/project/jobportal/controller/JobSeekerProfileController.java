@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/job-seeker-profile")
 public class JobSeekerProfileController {
-    private JobSeekerProfileService jobSeekerProfileService;
-    private UsersRepository usersRepository;
+    private final JobSeekerProfileService jobSeekerProfileService;
+    private final UsersRepository usersRepository;
 
     public JobSeekerProfileController(JobSeekerProfileService jobSeekerProfileService, UsersRepository usersRepository) {
         this.jobSeekerProfileService = jobSeekerProfileService;
@@ -36,7 +37,18 @@ public class JobSeekerProfileController {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             Users user = usersRepository.findByEmail(authentication.getName())
                     .orElseThrow(() -> new RuntimeException("User Not Found"));
+            Optional<JobSeekerProfile> profile = jobSeekerProfileService.getOne(user.getUserId());
+            if (profile.isPresent()) {
+                jobSeekerProfile = profile.get();
+                if (jobSeekerProfile.getSkills().isEmpty()){
+                    skills.add(new Skills());
+                    jobSeekerProfile.setSkills(skills);
+                }
+            }
+
         }
+        model.addAttribute("profile", jobSeekerProfile);
+        model.addAttribute("skills", skills);
 
         return "job-seeker-profile";
     }
