@@ -12,7 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,7 @@ public class JobSeekerProfileController {
             Optional<JobSeekerProfile> profile = jobSeekerProfileService.getOne(user.getUserId());
             if (profile.isPresent()) {
                 jobSeekerProfile = profile.get();
-                if (jobSeekerProfile.getSkills().isEmpty()){
+                if (jobSeekerProfile.getSkills().isEmpty()) {
                     skills.add(new Skills());
                     jobSeekerProfile.setSkills(skills);
                 }
@@ -52,4 +55,24 @@ public class JobSeekerProfileController {
 
         return "job-seeker-profile";
     }
+
+    @PostMapping("/addNew")
+    public String addNew(JobSeekerProfile jobSeekerProfile
+            , @RequestParam("image") MultipartFile image
+            , @RequestParam("pdf") MultipartFile pdf, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            Users user = usersRepository.findByEmail(authentication.getName())
+                    .orElseThrow(() -> new RuntimeException("No such user"));
+            jobSeekerProfile.setUserId(user);
+            jobSeekerProfile.setUserAccountId(user.getUserId());
+        }
+        List<Skills> skills= new ArrayList<>();
+        model.addAttribute("profile", jobSeekerProfile);
+        model.addAttribute("skills", skills);
+
+        return "redirect:/dashboard/";
+
+    }
 }
+
