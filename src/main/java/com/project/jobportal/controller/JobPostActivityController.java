@@ -16,9 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class JobPostActivityController {
@@ -31,7 +34,39 @@ public class JobPostActivityController {
     }
 
     @GetMapping("/dashboard/")
-    public String searchJobs(Model model) {
+    public String searchJobs(Model model,
+                             @RequestParam(value = "job", required = false) String job
+            , @RequestParam(value = "location", required = false) String location
+            , @RequestParam(value = "partTime", required = false) String partTime
+            , @RequestParam(value = "fullTime", required = false) String fullTime
+            , @RequestParam(value = "freelancer", required = false) String freelancer
+            , @RequestParam(value = "remoteOnly", required = false) String remoteOnly
+            , @RequestParam(value = "officeOnly", required = false) String officeOnly
+            , @RequestParam(value = "partialRemote", required = false) String partialRemote
+            , @RequestParam(value = "today", required = false) boolean today
+            , @RequestParam(value = "days7", required = false) boolean days7
+            , @RequestParam(value = "days30", required = false) boolean days30) {
+
+        model.addAttribute("partTime", Objects.equals(partTime,"Part-Time"));
+        model.addAttribute("fullTime", Objects.equals(fullTime,"Full-Time"));
+        model.addAttribute("freelancer", Objects.equals(freelancer,"Freelancer"));
+
+        model.addAttribute("remoteOnly", Objects.equals(remoteOnly,"Remote-Only"));
+        model.addAttribute("officeOnly", Objects.equals(officeOnly,"Office-Only"));
+        model.addAttribute("partialRemote", Objects.equals(partialRemote,"Partial-Remote"));
+
+        model.addAttribute("today",today);
+        model.addAttribute("days7",days7);
+        model.addAttribute("days30",days30);
+
+        model.addAttribute("job",job);
+        model.addAttribute("location",location);
+
+        LocalDate searchDate=null;
+//        todo
+
+
+
         Object currentUserProfile = usersService.getCurrentUserprofile();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
