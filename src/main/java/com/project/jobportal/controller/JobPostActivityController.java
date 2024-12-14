@@ -63,7 +63,32 @@ public class JobPostActivityController {
         model.addAttribute("location",location);
 
         LocalDate searchDate=null;
-//        todo
+        List<JobPostActivity> jobPost=null;
+
+        boolean dateSearchFlag=true;
+        boolean remote=true;
+        boolean type=true;
+
+        if (days30){
+            searchDate=LocalDate.now().minusDays(30);
+        }else if (days7){
+            searchDate=LocalDate.now().minusDays(7);
+        }else if (today){
+            searchDate=LocalDate.now();
+        }else dateSearchFlag=false;
+
+        if (partTime==null && fullTime==null && freelancer==null){
+            partTime="Part-Time";
+            fullTime="Full-Time";
+            freelancer="Freelancer";
+            remote=false;
+        }
+        if (remoteOnly==null && officeOnly==null && partialRemote==null && today){
+            remoteOnly="Remote-Only";
+            officeOnly="Office-Only";
+            partialRemote="Partial-Remote";
+            today=false;
+        }
 
 
 
