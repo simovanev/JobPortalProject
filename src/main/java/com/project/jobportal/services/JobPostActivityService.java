@@ -4,8 +4,10 @@ import com.project.jobportal.entity.*;
 import com.project.jobportal.repository.JobPostActivityRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class JobPostActivityService {
@@ -34,5 +36,15 @@ public class JobPostActivityService {
 
     public JobPostActivity getOne(int id) {
       return   postActivityRepository.findById(id).orElseThrow(()->new RuntimeException("Job not found"));
+    }
+
+
+    public List<JobPostActivity> getAll() {
+        return postActivityRepository.findAll();
+    }
+
+    public List<JobPostActivity> search(String job, String location, List<String> type, List<String> remote, LocalDate searchDate) {
+    return Objects.isNull(searchDate)?postActivityRepository.searchWithoutDate(job,location,type,remote):
+            postActivityRepository.search(job,location,type,remote,searchDate);
     }
 }
