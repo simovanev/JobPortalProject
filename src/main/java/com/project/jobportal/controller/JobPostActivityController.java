@@ -1,10 +1,8 @@
 package com.project.jobportal.controller;
 
-import com.project.jobportal.entity.JobPostActivity;
-import com.project.jobportal.entity.RecruiterJobsDto;
-import com.project.jobportal.entity.RecruiterProfile;
-import com.project.jobportal.entity.Users;
+import com.project.jobportal.entity.*;
 import com.project.jobportal.services.JobPostActivityService;
+import com.project.jobportal.services.JobSeekerApplyService;
 import com.project.jobportal.services.UsersService;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -29,10 +27,12 @@ import java.util.Objects;
 public class JobPostActivityController {
     private final UsersService usersService;
     private final JobPostActivityService jobPostActivityService;
+    private final JobSeekerApplyService jobSeekerApplyService;
 
-    public JobPostActivityController(UsersService usersService, JobPostActivityService jobPostActivityService) {
+    public JobPostActivityController(UsersService usersService, JobPostActivityService jobPostActivityService, JobSeekerApplyService jobSeekerApplyService) {
         this.usersService = usersService;
         this.jobPostActivityService = jobPostActivityService;
+        this.jobSeekerApplyService = jobSeekerApplyService;
     }
 
     @GetMapping("/dashboard/")
@@ -110,6 +110,10 @@ public class JobPostActivityController {
             List<RecruiterJobsDto> recruiterJobs =
                     jobPostActivityService.getRecruiterJobs(((RecruiterProfile) currentUserProfile).getUserAccountId());
             model.addAttribute("jobPost", recruiterJobs);
+        }else {
+            List<JobSeekerApply> jobSeekerApplyList = jobSeekerApplyService
+                    .getCandidatesJobs((JobSeekerProfile) currentUserProfile);
+
         }
         model.addAttribute("user", currentUserProfile);
 
