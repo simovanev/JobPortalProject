@@ -44,7 +44,7 @@ public class JobPostActivityController {
             , @RequestParam(value = "location", required = false) String location
             , @RequestParam(value = "partTime", required = false) String partTime
             , @RequestParam(value = "fullTime", required = false) String fullTime
-            , @RequestParam(value = "freelancer", required = false) String freelancer
+            , @RequestParam(value = "freelance", required = false) String freelance
             , @RequestParam(value = "remoteOnly", required = false) String remoteOnly
             , @RequestParam(value = "officeOnly", required = false) String officeOnly
             , @RequestParam(value = "partialRemote", required = false) String partialRemote
@@ -54,7 +54,7 @@ public class JobPostActivityController {
 
         model.addAttribute("partTime", Objects.equals(partTime, "Part-Time"));
         model.addAttribute("fullTime", Objects.equals(fullTime, "Full-Time"));
-        model.addAttribute("freelancer", Objects.equals(freelancer, "Freelancer"));
+        model.addAttribute("freelancer", Objects.equals(freelance, "Freelancer"));
 
         model.addAttribute("remoteOnly", Objects.equals(remoteOnly, "Remote-Only"));
         model.addAttribute("officeOnly", Objects.equals(officeOnly, "Office-Only"));
@@ -82,10 +82,10 @@ public class JobPostActivityController {
             searchDate = LocalDate.now();
         } else dateSearchFlag = false;
 
-        if (partTime == null && fullTime == null && freelancer == null) {
+        if (partTime == null && fullTime == null && freelance == null) {
             partTime = "Part-Time";
             fullTime = "Full-Time";
-            freelancer = "Freelancer";
+            freelance = "Freelancer";
             remote = false;
         }
         if (remoteOnly == null && officeOnly == null && partialRemote == null && today) {
@@ -96,7 +96,7 @@ public class JobPostActivityController {
         }
         if (!dateSearchFlag && !remote && !StringUtils.hasText(job) && !StringUtils.hasText(location)) {
             jobPost = jobPostActivityService.getAll();
-        } else jobPost = jobPostActivityService.search(job, location, Arrays.asList(partTime, fullTime, freelancer),
+        } else jobPost = jobPostActivityService.search(job, location, Arrays.asList(partTime, fullTime, freelance),
                 Arrays.asList(remoteOnly, officeOnly, partialRemote), searchDate);
 
 
@@ -125,25 +125,25 @@ public class JobPostActivityController {
                 saved = false;
                 for (JobSeekerApply jobSeekerApply : jobSeekerApplyList) {
                     if (Objects.equals(jobActivity.getJobPostId(),jobSeekerApply.getJob().getJobPostId())){
-                        jobActivity.setActive(true);
+                        jobActivity.setIsActive(true);
                         exist=true;
                         break;
                     }
                 }
                 for (JobSeekerSave jobSeekerSave:jobSeekerSaveList){
                     if (Objects.equals(jobActivity.getJobPostId(),jobSeekerSave.getJob().getJobPostId())){
-                        jobActivity.setSaved(true);
+                        jobActivity.setIsSaved(true);
                         saved=true;
                         break;
                     }
                 }
                 if (!exist){
-                    jobActivity.setActive(false);
+                    jobActivity.setIsActive(false);
                 }if (!saved){
-                    jobActivity.setSaved(false);
+                    jobActivity.setIsSaved(false);
                 }
-                model.addAttribute("jobPost" , jobPost);
             }
+                model.addAttribute("jobPost" , jobPost);
         }
         model.addAttribute("user", currentUserProfile);
 
