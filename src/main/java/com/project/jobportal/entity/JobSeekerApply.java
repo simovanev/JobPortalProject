@@ -18,7 +18,7 @@ public class JobSeekerApply {
     @JoinColumn(name = "job", referencedColumnName = "jobPostId")
     private JobPostActivity job;
     @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private Date applyDAte;
+    private Date applyDate;
     private String coverLetter;
 
     public JobSeekerApply() {
@@ -28,7 +28,7 @@ public class JobSeekerApply {
         this.id = id;
         this.userId = userId;
         this.job = job;
-        this.applyDAte = applyDAte;
+        this.applyDate = applyDAte;
         this.coverLetter = coverLetter;
     }
 
@@ -57,11 +57,11 @@ public class JobSeekerApply {
     }
 
     public Date getApplyDAte() {
-        return applyDAte;
+        return applyDate;
     }
 
     public void setApplyDAte(Date applyDAte) {
-        this.applyDAte = applyDAte;
+        this.applyDate = applyDAte;
     }
 
     public String getCoverLetter() {
@@ -78,7 +78,7 @@ public class JobSeekerApply {
                 "id=" + id +
                 ", userId=" + userId +
                 ", job=" + job +
-                ", applyDAte=" + applyDAte +
+                ", applyDAte=" + applyDate +
                 ", coverLetter='" + coverLetter + '\'' +
                 '}';
     }
