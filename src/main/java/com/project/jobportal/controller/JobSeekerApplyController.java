@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class JobSeekerApplyController {
@@ -80,5 +82,22 @@ public class JobSeekerApplyController {
         return "job-details";
     }
 
+    @PostMapping("job-details/apply/{id}")
+    public String apply(@PathVariable("id") int id, JobSeekerApply jobSeekerApply) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUsername = authentication.getName();
+            Users user = usersService.findByEmail(currentUsername);
+            Optional<JobSeekerProfile> seekerProfile = jobSeekerProfileService.getOne(user.getUserId());
+            JobPostActivity jobPostActivity = jobPostActivityService.getOne(id);
 
+            if (seekerProfile.isPresent() && jobPostActivity != null) {
+                jobSeekerApply.setUserId(seekerProfile.get());
+                jobSeekerApply.setJob(jobPostActivity);
+                jobSeekerApply.setApplyDAte(new Date());
+            } else throw new RuntimeException("No such user");
+            jobSeekerApplyService.addNew(jobSeekerApply);
+        }
+        return "redirect:/dashboard/";
+    }
 }
